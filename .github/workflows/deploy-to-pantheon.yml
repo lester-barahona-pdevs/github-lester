@@ -22,19 +22,6 @@ jobs:
         config: ${{ secrets.SSH_CONFIG }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-    - name: deploy to Pantheon
-      run: |
-        mkdir -p ~/.ssh/
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/staging.key
-        chmod 600 ~/.ssh/staging.key
-        cat >>~/.ssh/config <<END
-        Host staging
-          HostName *
-          IdentityFile ~/.ssh/staging.key
-          StrictHostKeyChecking no
-        END
-
-
     - name: deployer
       env:
         pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
