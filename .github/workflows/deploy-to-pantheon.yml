@@ -7,15 +7,16 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.PANTHEON_SSH_KEY }}
-        config: ${{ secrets.SSH_CONFIG }}
-        known_hosts: ${{ secrets.KNOWN_HOSTS }}
-    - name: prepare for Behat testing
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PANTHEON_SSH_KEY }}
+          config: ${{ secrets.SSH_CONFIG }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: prepare for Behat testing
         env:
           SSH_PRIVATE_KEY: ${{ secrets.PANTHEON_SSH_KEY }}
         run: |
@@ -23,9 +24,10 @@ jobs:
           chmod 600 ../private.key
           eval `ssh-agent -s`
           ssh-add ../private.key
-    - name: deployer
-      env:
-        pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
-      run: |
-        git remote add pantheon $pantheon_repo
-        git push pantheon HEAD:master
+
+      - name: deployer
+        env:
+          pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
+        run: |
+          git remote add pantheon $pantheon_repo
+          git push pantheon HEAD:master
