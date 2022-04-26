@@ -24,10 +24,16 @@ jobs:
 
     - name: deploy to Pantheon
       run: |
-        echo "$SSH_PRIVATE_KEY" > ../private.key
-        chmod 600 ../private.key
-        eval `ssh-agent -s`
-        ssh-add ../private.key
+        mkdir -p ~/.ssh/
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/staging.key
+        chmod 600 ~/.ssh/staging.key
+        cat >>~/.ssh/config <<END
+        Host staging
+          HostName *
+          IdentityFile ~/.ssh/staging.key
+          StrictHostKeyChecking no
+        END
+
 
     - name: deployer
       env:
