@@ -19,7 +19,5 @@ jobs:
       env:
         pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
       run: |
-        git config --global user.email "l.barahona@paralleldevs.com"
-        git config --global user.name "GitHub Actions"
         git remote add pantheon $pantheon_repo
         git push pantheon HEAD:master
