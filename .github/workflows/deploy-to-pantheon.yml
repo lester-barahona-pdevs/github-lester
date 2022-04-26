@@ -7,18 +7,17 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.PANTHEON_SSH_KEY }}
-          config: ${{ secrets.SSH_CONFIG }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.PANTHEON_SSH_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-      - name: deployer
-        env:
-          pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
-        run: |
-          git remote add pantheon $pantheon_repo
-          git push pantheon HEAD:master
+    - name: deployer
+      env:
+        pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
+      run: |
+        git remote add pantheon $pantheon_repo
+        git push pantheon HEAD:master
