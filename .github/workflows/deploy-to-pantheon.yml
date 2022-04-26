@@ -24,14 +24,17 @@ jobs:
         config: ${{ secrets.SSH_CONFIG }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-    - name: Installing Terminus
-      uses: kopepasah/setup-pantheon-terminus@master
-      with:
-        pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+    - name: Install Terminus
+      run: |
+        composer global require consolidation/cgr:^2.0.5
+        cgr pantheon-systems/terminus:^2.6.1
+        terminus auth:login --machine-token=${{ secrets.PANTHEON_MACHINE_TOKEN }}
 
     - name: deployer
       run: |
         BASE_BRANCH=${GITHUB_REF##*/}
+        git config --global user.email "github-actions@example.com"
+        git config --global user.name "GitHub Actions"
         git remote add pantheon $pantheon_repo
-        git push -u pantheon HEAD:refs/heads/$BASE_BRANCH
+        git push --force pantheon HEAD:$BASE_BRANCH
         terminus multidev:create $pantheon_site_name.dev $BASE_BRANCH
