@@ -3,17 +3,31 @@ on:
   push:
     branches:
       - 'master'
+env:
+  SSH_PRIVATE_KEY: ${{ secrets.PANTHEON_SSH_KEY }}
+
 jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - uses: shimataro/ssh-key-action@v2
+
+    - name: SSH Key
+      uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.PANTHEON_SSH_KEY }}
+        config: ${{ secrets.SSH_CONFIG }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+    - name: deploy to Pantheon
+        run: |
+          echo "$SSH_PRIVATE_KEY" > ../private.key
+          chmod 600 ../private.key
+          eval `ssh-agent -s`
+          ssh-add ../private.key
 
     - name: deployer
       env:
