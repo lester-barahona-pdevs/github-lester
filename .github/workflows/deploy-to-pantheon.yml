@@ -25,9 +25,9 @@ jobs:
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
     - name: Setup PHP
-        uses: shivammathur/setup-php@c0c6e403b6c6c44657450627093edddf3b905c5b # 2.9.0
-        with:
-          php-version: '7.4'
+      uses: shivammathur/setup-php@c0c6e403b6c6c44657450627093edddf3b905c5b # 2.9.0
+      with:
+        php-version: '7.4'
 
     - name: Install Terminus
       run: |
